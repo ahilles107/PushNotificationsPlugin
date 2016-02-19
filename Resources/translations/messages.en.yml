@@ -1,0 +1,27 @@
+pushnotifications:
+    menu:
+        name: Push Notifications
+        settings: Settings
+    permissions:
+        create: "Create"
+        publish: "Publish"
+        manage: "Manage"
+    statuses:
+        notprocesses: "Waiting to be accepted"
+        processes: "Published"
+        errored: "Errored"
+    createNotiffication:
+        withoutPublishRights: "Your notification will need to be accepted by someone with publish rights."
+        required: "At least one application must be checked"
+    settings:
+        title: "Push Notifications Settings"
+        formTitle: "Edit default settings"
+    hook:
+        notpublished: "Before creating Push Notification you need to publish article."
+        publish: "Create and publish notification"
+        create: "Create notification"
+    table:
+        actions:
+            accept: "Accept"
+            edit: "Edit"
+            actions: "Actions"

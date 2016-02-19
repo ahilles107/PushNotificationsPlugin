@@ -1,0 +1,103 @@
+{% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
+
+{% block admin_title %}{{ parent() }} - PushNotifications Admin{% endblock %}
+{% block admin_page_title_content %}{% endblock %}
+
+{% block admin_page_title_box %}
+<div class="toolbar row">
+    <span class="article-title">Push Notifications - create notification</span>
+    <div class="pull-right">
+        <div class="actions">
+            <ul class="navigation" style="height: auto;">
+                <li>
+                    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}">List notifications</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block admin_stylesheets %}
+<link rel="stylesheet" href="{{ asset('/bundles/ahsadvertsplugin/css/backend.css') }}">
+<link rel="stylesheet" href="{{ asset('/admin-style/action_buttons.css') }}">
+<style type="text/css" media="screen">
+    a.action-btn {margin-left: 5px; margin-bottom: 5px;}
+    #notification_publishDate_date{ float:left; margin-right: 15px; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="plugin-container">
+{% if form_errors(form) %}
+    <div class="alerts alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ form_errors(form) }}
+    </div>
+{% endif %}
+
+{{ form_start(form, {'attr': {'id': 'create-push-notification', 'class': 'form-horizontal'}}) }}
+<fieldset>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.title) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.title, {'attr': {'class': 'form-control input-md'}}) }}
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.content) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.content, {'attr': {'class': 'form-control input-md'}}) }}
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.publishDate) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.publishDate, {'attr': {'class': 'form-control input-md'}}) }}
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.applications) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.applications, {'attr': {'class': 'form-control input-md'}}) }}
+    <div class="alert alert-warning js-application-required" style="display:none;" role="alert"><h4>{{ 'pushnotifications.createNotiffication.required'|trans }}</h4></div>
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.url) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.url, {'attr': {'class': 'form-control input-md'}}) }}
+  </div>
+</div>
+{% if not hasPermission('plugin_pushnotifications_publish') %}
+<div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+    <div class="alert alert-warning" role="alert"><h5>{{ 'pushnotifications.createNotiffication.withoutPublishRights'|trans }}</h5></div>
+    </div>
+</div>
+{% endif %}
+<div class="form-group">
+  <div class="col-md-4 col-md-offset-4">
+    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">Cancel</a>
+    <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2 js-send-notification">Save</button>
+  </div>
+</div>
+</fieldset>
+{{ form_end(form) }}
+
+<script>
+$(document).ready(function() {
+    $('.js-send-notification').click(function(e){
+        e.preventDefault();
+
+        if ($('#notification_applications input:checked').length === 0) {
+            $('.js-application-required').show();
+            return;
+        }
+        $('.js-application-required').hide();
+        $('#create-push-notification').submit();
+    });
+});
+</script>
+{% endblock %}

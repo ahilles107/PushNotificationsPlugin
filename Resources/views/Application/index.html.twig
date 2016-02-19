@@ -1,0 +1,150 @@
+{% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
+
+{% block admin_stylesheets %}
+<link rel="stylesheet" href="{{ asset('/bundles/ahsadvertsplugin/css/backend.css') }}">
+<link rel="stylesheet" href="{{ asset('/bundles/newscoopnewscoop/css/jquery.dynatable.css') }}">
+<link rel="stylesheet" href="{{ asset('/admin-style/action_buttons.css') }}">
+<style type="text/css" media="screen">
+    #notifications-table {padding: 10px;border: 1px solid #ccc;}
+    #notifications-table th {background: #007fb3;color: #fff;}
+    #notifications-table .glyphicon{font-size: 1.50em;}
+    a.action-btn {margin-left: 5px; margin-bottom: 5px;}
+</style>
+{% endblock %}
+
+{% block admin_page_title_box %}
+<div class="toolbar row">
+    <span class="article-title">PushNotifications Applications</span>
+    <div class="pull-right">
+        <div class="actions">
+            <ul class="navigation" style="height: auto;">
+                <li>
+                    <a class="add" href="{{ url('ahs_pushnotificationsplugin_applications_create')}}">Add new application</a>
+                </li>
+                <li>
+                    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}">List notifications</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block admin_scripts %}
+<script src="{{ asset('/js/select2/select2.js') }}"></script>
+<script src="{{ asset('/bundles/newscoopnewscoop/js/jquery.dynatable.js') }}"></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="plugin-container">
+    <table id="notifications-table" class="table table-bordered table-hover table-striped" style="word-wrap: break-word;table-layout: fixed;">
+    <thead>
+      <tr>
+        <th data-dynatable-column="title">Title</th>
+        <th style="width: 165px" data-dynatable-column="pushhandler_name">Push Handler Name</th>
+        <th data-dynatable-column="pushhandler_description">Push Handler Description</th>
+        {% if hasPermission('plugin_pushnotifications_manage') %}
+        <th style="width: 116px;">{{ 'pushnotifications.table.actions.actions'|trans }}</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+  function formatDate(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds() > 10 ? date.getSeconds() : '0'+date.getSeconds();
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ':' + seconds;
+
+    return date.getFullYear() + "-" + date.getMonth()+1 + "-" + date.getDate() + " " + strTime;
+  }
+
+  var dynatable = $('#notifications-table').bind('dynatable:init', function (e, dynatable) {}).dynatable({
+    inputs: {
+        paginationClass: 'pagination',
+        paginationActiveClass: 'current',
+        paginationDisabledClass: 'unavailable',
+        paginationPrev: '&laquo;',
+        paginationNext: '&raquo;',
+        pageText: '{{ 'dynatable.page'|trans({},'helpers') }}',
+        perPageText: '{{ 'dynatable.perPageText'|trans({},'helpers') }}',
+        pageText: '{{ 'dynatable.pageText'|trans({},'helpers') }}',
+        recordCountPageBoundTemplate: '{{ 'dynatable.recordCountPageBoundTemplate'|trans({},'helpers') }}',
+        recordCountPageUnboundedTemplate: '{{ 'dynatable.recordCountPageUnboundedTemplate'|trans({},'helpers') }}',
+        recordCountFilteredTemplate: '{{ 'dynatable.recordCountFilteredTemplate'|trans({},'helpers') }}',
+        recordCountText: '{{ 'dynatable.recordCountText'|trans({},'helpers') }}',
+        processingText: '{{ 'dynatable.processingText'|trans({},'helpers') }}'
+    },
+    dataset: {
+        ajax: true,
+        ajaxUrl: Routing.generate('ahs_pushnotificationsplugin_applications_load'),
+        ajaxOnLoad: false,
+        records: [],
+        perPageDefault: 10,
+        perPageOptions: [10,20,50,100],
+    },
+    features: {
+        paginate: true,
+    },
+    writers: {
+        _cellWriter: function (column, record) {
+            if (column.label == '{{ 'pushnotifications.table.actions.actions'|trans }}') {
+                column.attributeWriter = function(record) {
+                    var html = "";
+                    console.log(record['links'], record['links'].length)
+                    for (index = 0; index < record['links'].length; ++index) {
+                         var el = record['links'][index];
+                         console.log(el);
+                         if (el['rel'] == 'edit') {
+                             html += "<a class='btn btn-xs btn-success action-btn' href="+el['href']+">{{ 'pushnotifications.table.actions.edit'|trans }}</a>";
+                         }
+                    }
+                    return html;
+                }
+            }
+
+            if (column.id == 'pushhandler_name') {
+                column.attributeWriter = function(record) {
+                  return record.pushhandler.name;
+                }
+            }
+
+            if (column.id == 'pushhandler_description') {
+                column.attributeWriter = function(record) {
+                  return record.pushhandler.description;
+                }
+            }
+
+            var html = column.attributeWriter(record),
+                td = '<td';
+
+            if (column.hidden || column.textAlign) {
+              td += ' style="';
+              // keep cells for hidden column headers hidden
+              if (column.hidden) {
+                td += 'display: none;';
+              }
+              // keep cells aligned as their column headers are aligned
+              if (column.textAlign) {
+                td += 'text-align: ' + column.textAlign + ';';
+              }
+              td += '"';
+            }
+            if (column.cssClass) {
+              td += ' class="' + column.cssClass + '"';
+            }
+
+            return td + '>' + html + '</td>';
+        }
+    }
+}).data('dynatable');
+</script>
+
+{% endblock %}

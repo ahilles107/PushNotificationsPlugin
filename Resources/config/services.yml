@@ -1,0 +1,32 @@
+services:
+    ahs_pushnotifications_plugin.lifecyclesubscriber:
+        class: AHS\PushNotificationsPluginBundle\EventListener\LifecycleSubscriber
+        arguments:
+            - @service_container
+        tags:
+            - { name: kernel.event_subscriber}
+
+    ahs_pushnotifications_plugin.configure_menu_listener:
+        class: AHS\PushNotificationsPluginBundle\EventListener\ConfigureMenuListener
+        tags:
+          - { name: kernel.event_listener, event: newscoop_newscoop.menu_configure, method: onMenuConfigure }
+        arguments:
+            - @translator
+
+    ahs_extra_plugin.hooks.listener:
+        class: "AHS\\PushNotificationsPluginBundle\\EventListener\\HooksListener"
+        arguments: ["@service_container"]
+        tags:
+          - { name: kernel.event_listener, event: newscoop_admin.interface.article.edit.sidebar, method: sidebar }
+
+    ahs_pushnotifications_plugin.permissions.listener:
+        class: AHS\PushNotificationsPluginBundle\EventListener\PermissionsListener
+        arguments:
+            - @translator
+        tags:
+          - { name: kernel.event_listener, event: newscoop.plugins.permissions.register, method: registerPermissions }
+
+    ahs_pushnotifications_plugin.service.push_handler:
+        class: AHS\PushNotificationsPluginBundle\Service\PushHandlerService
+        arguments:
+            - @doctrine

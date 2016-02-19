@@ -1,0 +1,105 @@
+<style>
+.puhsNotificationsPreview {border: 1px solid #ccc; margin: 5px 1px;}
+.puhsNotificationsPreview .pushIcon{
+    float: left;
+    width: 75px;
+    height: 75px;
+    margin: 0px 7px 0px 0px;
+}
+.puhsNotificationsPreview .pushIcon img {
+    width: 75px;
+    height: 75px;
+    border-right: 1px solid #ccc;
+}
+.puhsNotificationsPreview .pushContent {float:left; width: 260px;}
+.puhsNotificationsPreview .pushContent .notificationTitle input {
+    width: 95%;
+    border: 1px solid #ccc;
+    margin: 5px 0px;
+    padding: 3px;
+    font-size: 14px;
+}
+.puhsNotificationsPreview .pushContent .notificationContent textarea {
+    width: 95%;
+    border: 1px solid #ccc;
+    margin: 0px;
+    padding: 3px;
+    font-size: 11px;
+    min-height: 31px;
+}
+
+#notification_publishDate_date {float:left; margin-right: 10px; font-size: 14px;}
+#notification_publishDate_time {float:left; font-size: 14px;}
+
+.articlebox .form-group {margin: 5px 0px;}
+.articlebox .form-group label{}
+
+.articlebox .form-group #notification_url {
+    width: 95%;
+    border: 1px solid #ccc;
+    margin: 0px 0px;
+    padding: 4px;
+    font-size: 11px;
+}
+.articlebox .form-group #notification_applications label {margin-right: 10px}
+</style>
+<div class="articlebox" title="{{ pluginName }}">
+        {{ form_start(form, {attr: {'id': 'create-push-notification', 'target': '_blank'}}) }}
+            <div class="puhsNotificationsPreview">
+                <div class="pushIcon"><img src="{{ asset('/bundles/ahspushnotificationsplugin/images/newscoop_icon.png') }}" /></div>
+                <div class="pushContent">
+                    <div class="notificationTitle">{{ form_widget(form.title, {'attr': {'class': 'form-control input-md'}}) }}</div>
+                    <div class="notificationContent">{{ form_widget(form.content, {'attr': {'class': 'form-control input-md'}}) }}</div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="textinput" class="block-label">{{ form_label(form.publishDate) }}: </label>
+              <div >
+                {{ form_widget(form.publishDate, {'attr': {'class': 'deactivate-date-time-widget'}}) }}
+              </div>
+              <div style="clear: both"></div>
+            </div>
+
+            <div class="form-group">
+              <label  class="block-label" for="textinput">{{ form_label(form.applications) }}: </label>
+              <div>
+                {{ form_widget(form.applications, {'attr': {'class': 'form-control input-md'}}) }}
+              </div>
+              <div class="alert alert-warning js-application-required" style="display:none;" role="alert"><h4>{{ 'pushnotifications.createNotiffication.required'|trans }}</h4></div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label class="block-label" for="textinput">{{ form_label(form.url) }}: </label>
+              <div>
+                {{ form_widget(form.url) }}
+              </div>
+            </div>
+
+            {% if not hasPermission('plugin_pushnotifications_publish') %}
+            <div class="alert alert-warning" role="alert"><h4>{{ 'pushnotifications.createNotiffication.withoutPublishRights'|trans }}</h4></div>
+            {% endif %}
+
+            <input type="submit" class="default-button right-floated clear-margin next-to-field js-send-notification" value="{% if not hasPermission('plugin_pushnotifications_publish') %}{{ 'pushnotifications.hook.create'|trans }}{% else %}{{ 'pushnotifications.hook.publish'|trans }}{% endif %}">
+        {{ form_end(form) }}
+</div>
+<script>
+$(document).ready(function() {
+    if ($('#notification_applications input').length === 1) {
+        $('#notification_applications input').attr('checked', 'checked');
+    }
+
+    $('.js-send-notification').click(function(e){
+        e.preventDefault();
+
+        if ($('#notification_applications input:checked').length === 0) {
+            $('.js-application-required').show();
+
+            return;
+        }
+        $('.js-application-required').hide();
+        $('#create-push-notification').submit();
+    });
+});
+</script>

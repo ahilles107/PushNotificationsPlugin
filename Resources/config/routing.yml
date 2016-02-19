@@ -1,0 +1,4 @@
+ahs_push_notifications_plugin:
+    resource: "@AHSPushNotificationsPluginBundle/Controller"
+    type:     annotation
+    prefix:   /

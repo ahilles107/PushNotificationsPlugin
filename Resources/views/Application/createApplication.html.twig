@@ -1,0 +1,39 @@
+{% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
+
+{% block admin_title %}{{ parent() }} - PushNotifications Admin{% endblock %}
+{% block admin_page_title_content %}PushNotifications Admin{% endblock %}
+{% block admin_stylesheets %}
+<link rel="stylesheet" href="{{ asset('/bundles/ahsadvertsplugin/css/backend.css') }}">
+{% endblock %}
+{% block admin_content %}
+<div class="plugin-container">
+{% if form_errors(form) %}
+    <div class="alerts alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ form_errors(form) }}
+    </div>
+{% endif %}
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+<fieldset>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.title) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.title, {'attr': {'class': 'form-control input-md'}}) }}
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.pushHandler) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.pushHandler, {'attr': {'class': 'form-control input-md'}}) }}
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-success pull-right">Next</button>
+    <a href="{{ path('ahs_pushnotificationsplugin_applications_index')}}" class="btn btn-default pull-right button-align">Cancel and go back</a>
+  </div>
+</div>
+</fieldset>
+{{ form_end(form) }}
+{% endblock %}

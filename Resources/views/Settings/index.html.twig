@@ -1,0 +1,53 @@
+{% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
+{% block admin_page_title_box %}
+<div class="toolbar row">
+    <span class="article-title">{{ 'pushnotifications.settings.title'|trans }}</span>
+    <div class="pull-right">
+        <div class="actions">
+            <ul class="navigation" style="height: auto;">
+                <li>
+                    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}">List notifications</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block admin_stylesheets %}
+<link rel="stylesheet" href="{{ asset('/bundles/ahsadvertsplugin/css/backend.css') }}">
+<link rel="stylesheet" href="{{ asset('/admin-style/action_buttons.css') }}">
+<style type="text/css" media="screen">
+    a.action-btn {margin-left: 5px; margin-bottom: 5px;}
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="plugin-container">
+{% if form_errors(form) %}
+    <div class="alerts alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ form_errors(form) }}
+    </div>
+{% endif %}
+
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+<fieldset>
+<h2>{{ 'pushnotifications.settings.formTitle'|trans }}:</h2>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.content_field) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.content_field, {'attr': {'class': 'form-control input-md'}}) }}
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-4 col-md-offset-4">
+    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">Cancel</a>
+    <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2">Save</button>
+  </div>
+</div>
+</fieldset>
+{{ form_end(form) }}
+{% endblock %}
