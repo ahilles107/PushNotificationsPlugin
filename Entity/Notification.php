@@ -16,13 +16,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Notification entity
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AHS\PushNotificationsPluginBundle\Entity\Repository\NotificationRepository")
  * @ORM\Table(name="plugin_ahspushnotifications_notification")
  */
 class Notification
 {
     const NOTIFICATION_NOTPROCESSED = 0;
     const NOTIFICATION_PROCESSED = 1;
+    const NOTIFICATION_REJECTED = 8;
     const NOTIFICATION_ERRORED = 9;
 
     /**
@@ -165,7 +166,7 @@ class Notification
 
     public function setArticleLanguage($articleLanguage)
     {
-        $this->$articleLanguage = $articleLanguage;
+        $this->articleLanguage = $articleLanguage;
 
         return $this;
     }
@@ -202,6 +203,13 @@ class Notification
     public function setUser($user)
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function setCreatedAt(\DateTime $date)
+    {
+        $this->createdAt = $date;
 
         return $this;
     }

@@ -8,6 +8,9 @@
     #notifications-table {padding: 10px;border: 1px solid #ccc;}
     #notifications-table th {background: #007fb3;color: #fff;}
     #notifications-table .glyphicon{font-size: 1.50em;}
+    #notifications-table tr.status-0 td{background-color: #f0ad4e; color: #FFF;}
+    #notifications-table tr.status-8 td{background-color: #d9534f; color: #FFF;}
+    #notifications-table tr.status-8 a, #notifications-table tr.status-0 td a {color: #FFF;}
     a.action-btn {margin-left: 5px; margin-bottom: 5px;}
 </style>
 {% endblock %}
@@ -43,7 +46,7 @@
         <th style="width: 165px" data-dynatable-column="content">Content</th>
         <th data-dynatable-column="application">Application</th>
         <th data-dynatable-column="userId">User</th>
-        <th data-dynatable-column="created">Created date</th>
+        <th data-dynatable-column="createdAt">Created date</th>
         <th data-dynatable-column="publishDate">Publish date</th>
         <th data-dynatable-column="status">Status</th>
         <th data-dynatable-column="recipients">Recipients number</th>
@@ -58,16 +61,24 @@
 </div>
 
 <script type="text/javascript">
-  function formatDate(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var seconds = date.getSeconds() > 10 ? date.getSeconds() : '0'+date.getSeconds();
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ':' + seconds;
 
-    return date.getFullYear() + "-" + date.getMonth()+1 + "-" + date.getDate() + " " + strTime;
+
+  function formatDate(d){
+    // padding function
+    var s = function(a,b){return(1e15+a+"").slice(-b)};
+
+    // default date parameter
+    if (typeof d === 'undefined'){
+        d = new Date();
+    };
+
+    // return ISO datetime
+    return d.getFullYear() + '-' +
+        s(d.getMonth()+1,2) + '-' +
+        s(d.getDate(),2) + ' ' +
+        s(d.getHours(),2) + ':' +
+        s(d.getMinutes(),2) + ':' +
+        s(d.getSeconds(),2);
   }
 
   var dynatable = $('#notifications-table').bind('dynatable:init', function (e, dynatable) {}).dynatable({
@@ -98,6 +109,17 @@
         paginate: true,
     },
     writers: {
+        _rowWriter: function defaultRowWriter(rowIndex, record, columns, cellWriter) {
+            var tr = '';
+
+            // grab the record's attribute for each column
+            for (var i = 0, len = columns.length; i < len; i++) {
+              tr += cellWriter(columns[i], record);
+            }
+
+            var row_class = "status-"+record.statusCode;
+            return '<tr class="'+row_class+'">' + tr + '</tr>';
+        },
         _cellWriter: function (column, record) {
             if (column.label == '{{ 'ads.table.actions.actions'|trans }}') {
                 column.attributeWriter = function(record) {
@@ -106,6 +128,12 @@
                         var el = record['links'][index];
                         if (el['rel'] == 'accept' && record['statusCode'] == 0) {
                             html += "<a class='btn btn-xs btn-success action-btn js-accept' href="+el['href']+">{{ 'pushnotifications.table.actions.accept'|trans }}</a>";
+                        }
+                        if (el['rel'] == 'reject' && record['statusCode'] == 0) {
+                            html += "<a class='btn btn-xs btn-danger action-btn js-reject' href="+el['href']+">{{ 'pushnotifications.table.actions.reject'|trans }}</a>";
+                        }
+                        if (el['rel'] == 'duplicate' && record['statusCode'] == 1) {
+                            html += "<a class='btn btn-xs btn-success action-btn js-reject' href="+el['href']+">{{ 'pushnotifications.table.actions.duplicate'|trans }}</a>";
                         }
                     }
                     return html;
@@ -118,7 +146,7 @@
                 }
             }
 
-            if (column.id == 'created') {
+            if (column.id == 'createdAt') {
                 column.attributeWriter = function(record) {
                     return formatDate(new Date(record.created.date));
                 }
@@ -131,7 +159,7 @@
             }
 
             var html = column.attributeWriter(record),
-                td = '<td';
+                td = '<td ';
 
             if (column.hidden || column.textAlign) {
               td += ' style="';

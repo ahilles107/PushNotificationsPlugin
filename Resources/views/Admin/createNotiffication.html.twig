@@ -79,6 +79,7 @@
 {% endif %}
 <div class="form-group">
   <div class="col-md-4 col-md-offset-4">
+    {{ form_widget(form.schedule, {'attr': {'style': 'margin-bottom: 10px;'}}) }}
     <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">Cancel</a>
     <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2 js-send-notification">Save</button>
   </div>
@@ -89,14 +90,12 @@
 <script>
 $(document).ready(function() {
     $('.js-send-notification').click(function(e){
-        e.preventDefault();
-
         if ($('#notification_applications input:checked').length === 0) {
+            e.preventDefault();
             $('.js-application-required').show();
             return;
         }
         $('.js-application-required').hide();
-        $('#create-push-notification').submit();
     });
 });
 </script>

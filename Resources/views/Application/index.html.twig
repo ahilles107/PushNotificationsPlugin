@@ -98,10 +98,8 @@
             if (column.label == '{{ 'pushnotifications.table.actions.actions'|trans }}') {
                 column.attributeWriter = function(record) {
                     var html = "";
-                    console.log(record['links'], record['links'].length)
                     for (index = 0; index < record['links'].length; ++index) {
                          var el = record['links'][index];
-                         console.log(el);
                          if (el['rel'] == 'edit') {
                              html += "<a class='btn btn-xs btn-success action-btn' href="+el['href']+">{{ 'pushnotifications.table.actions.edit'|trans }}</a>";
                          }

@@ -58,6 +58,9 @@ class NotificationType extends AbstractType
             ->add('url', 'text', array(
                 'error_bubbling' => true,
                 'required' => false,
+            ))
+            ->add('schedule', 'submit', array(
+                'attr' => array('class' => 'btn btn-primary col-md-12 js-send-notification'),
             ));
     }
 

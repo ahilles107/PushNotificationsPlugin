@@ -43,9 +43,13 @@ class HooksListener
             return;
         }
 
-        $article = $this->container->get('em')->getRepository('Newscoop\Entity\Article')
-                ->getArticle($event->getArgument('article')->getArticleNumber(), $event->getArgument('article')->getLanguageId())
-                ->getSingleResult();
+        $em = $this->container->get('em');
+        $article = $em->getRepository('Newscoop\Entity\Article')
+            ->getArticle($event->getArgument('article')->getArticleNumber(), $event->getArgument('article')->getLanguageId())
+            ->getSingleResult();
+        $articleNotifications = $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')->getAllByArticle(
+            $article->getNumber(), $article->getLanguageId()
+        )->getResult();
         $preferencesService = $this->container->get('system_preferences_service');
         $linkService = $this->container->get('article.link');
 
@@ -65,7 +69,8 @@ class HooksListener
             array(
                 'pluginName' => $translator->trans('pushnotifications.menu.name'),
                 'article' => $event->getArgument('article'),
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'articleNotifications' => $articleNotifications
             )
         );
         $event->addHookResponse($response);

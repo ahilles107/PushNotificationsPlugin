@@ -14,7 +14,6 @@
 </div>
 {% endblock %}
 
-
 {% block admin_stylesheets %}
 <link rel="stylesheet" href="{{ asset('/bundles/ahsadvertsplugin/css/backend.css') }}">
 <link rel="stylesheet" href="{{ asset('/admin-style/action_buttons.css') }}">
@@ -34,7 +33,6 @@
 
 {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 <fieldset>
-<h2>{{ 'pushnotifications.settings.formTitle'|trans }}:</h2>
 <div class="form-group">
   <label class="col-md-4 control-label" for="textinput">{{ form_label(form.content_field) }}</label>
   <div class="col-md-4">

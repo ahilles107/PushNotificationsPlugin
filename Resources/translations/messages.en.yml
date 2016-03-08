@@ -10,9 +10,11 @@ pushnotifications:
         notprocesses: "Waiting to be accepted"
         processes: "Published"
         errored: "Errored"
+        rejected: "Rejected"
     createNotiffication:
         withoutPublishRights: "Your notification will need to be accepted by someone with publish rights."
         required: "At least one application must be checked"
+        published: "Notification was published sucesfully"
     settings:
         title: "Push Notifications Settings"
         formTitle: "Edit default settings"
@@ -20,8 +22,14 @@ pushnotifications:
         notpublished: "Before creating Push Notification you need to publish article."
         publish: "Create and publish notification"
         create: "Create notification"
+        articleNotifications: Already created notifications (for this article)
+        waiting: waiting
+        rejected: rejected
+        recipients: recipients
     table:
         actions:
             accept: "Accept"
             edit: "Edit"
+            reject: "Reject"
+            duplicate: "Duplicate"
             actions: "Actions"

@@ -19,11 +19,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use AHS\PushNotificationsPluginBundle\Form\ApplicationType;
 use AHS\PushNotificationsPluginBundle\Entity\Application;
 use AHS\PushNotificationsPluginBundle\Form\NotificationType;
 use AHS\PushNotificationsPluginBundle\Entity\Notification;
+use AHS\PushNotificationsPluginBundle\Criteria\NotificationCriteria;
 
 class AdminController extends Controller
 {
@@ -38,10 +40,11 @@ class AdminController extends Controller
 
     /**
      * @Route("/admin/pushnotifications/notifications/create", name="ahs_pushnotificationsplugin_notification_create")
+     * @Route("/admin/pushnotifications/notifications/{notificationId}/duplicate", name="ahs_pushnotificationsplugin_notification_duplicate")
      * @Template()
      * @Method("GET|POST")
      */
-    public function createNotifficationAction(Request $request)
+    public function createNotifficationAction(Request $request, $notificationId = null)
     {
         $user = $this->container->get('user')->getCurrentUser();
         if (!$user->hasPermission('plugin_pushnotifications_create')) {
@@ -51,19 +54,34 @@ class AdminController extends Controller
         $em = $this->container->get('em');
         $notification = new Notification();
 
+        if ($notificationId) {
+            $notification = clone $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')
+                ->findOneById($notificationId);
+            $notification->setCreatedAt(new \DateTime('now'));
+            $notification->setPublishDate(new \DateTime('now'));
+            $notification->setPushHandlerResponse(array());
+            $notification->setRecipientsNumber(0);
+        }
+
         $form = $this->createForm(new NotificationType(), $notification);
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $notification->setUser($user);
                 $notification->setIsActive(true);
+                $notification->addPushHandlerResponse(array());
                 $em->persist($notification);
 
-                if ($user->hasPermission('plugin_pushnotifications_publish')) {
+                if ($user->hasPermission('plugin_pushnotifications_publish') && !$form->get('schedule')->isClicked()) {
                     $this->handleNotification($notification);
                 }
 
                 $em->flush();
+
+                if($request->isXmlHttpRequest()) {
+                    $notification->setApplications(null);
+                    return new Response($this->get('jms_serializer')->serialize($notification, 'json'));
+                }
 
                 return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_admin_index'));
             }
@@ -95,6 +113,26 @@ class AdminController extends Controller
     }
 
     /**
+     * @Route("/admin/pushnotifications/notifications/{notificationId}/reject", name="ahs_pushnotificationsplugin_notification_reject")
+     * @Method("POST|GET")
+     */
+    public function rejectNotificationAction($notificationId)
+    {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_publish')) {
+            throw new AccessDeniedException();
+        }
+
+        $em = $this->container->get('em');
+        $notification = $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')
+            ->findOneById($notificationId);
+        $notification->setStatus(Notification::NOTIFICATION_REJECTED);
+        $em->flush();
+
+        return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_admin_index'));
+    }
+
+    /**
      * @Route("/admin/pushnotifications/handlers/refresh")
      * @Method("POST|GET")
      */
@@ -109,19 +147,19 @@ class AdminController extends Controller
     /**
      * @Route("/admin/pushnotifications/load.json", options={"expose"=true}, name="ahs_pushnotificationsplugin_notification_load")
      */
-    public function loadAdsAction(Request $request)
+    public function loadNotificationsAction(Request $request)
     {
         $em = $this->container->get('em');
         $zendRouter = $this->container->get('zend_router');
         $userService = $this->container->get('user');
         $user = $userService->getCurrentUser();
 
-        $notifications = $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')->findAll();
+        $criteria = $this->processRequest($request);
+        $notifications = $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')->getListByCriteria($criteria);
         $pocessed = array();
         foreach ($notifications as $notification) {
             $pocessed[] = $this->processNotification($notification, $zendRouter, $this->container->get('translator'), $user);
         }
-        rsort($pocessed);
         $responseArray = array(
             'records' => $pocessed,
             'queryRecordCount' => count($notifications),
@@ -129,6 +167,39 @@ class AdminController extends Controller
         );
 
         return new JsonResponse($responseArray);
+    }
+
+    /**
+     * Process request parameters.
+     *
+     * @param Request $request Request object
+     *
+     * @return AnnouncementCriteria
+     */
+    private function processRequest(Request $request)
+    {
+        $criteria = new NotificationCriteria();
+
+        if ($request->query->has('sorts')) {
+            foreach ($request->get('sorts') as $key => $value) {
+                $criteria->orderBy[$key] = $value == '-1' ? 'desc' : 'asc';
+            }
+        }
+
+        if ($request->query->has('queries')) {
+            $queries = $request->query->get('queries');
+
+            if (array_key_exists('search', $queries)) {
+                $criteria->query = $queries['search'];
+            }
+        }
+
+        $criteria->maxResults = $request->query->get('perPage', 10);
+        if ($request->query->has('offset')) {
+            $criteria->firstResult = $request->query->get('offset');
+        }
+
+        return $criteria;
     }
 
     /**
@@ -144,7 +215,8 @@ class AdminController extends Controller
         $humanStatuses = array(
             Notification::NOTIFICATION_NOTPROCESSED => $translator->trans('pushnotifications.statuses.notprocesses'),
             Notification::NOTIFICATION_PROCESSED => $translator->trans('pushnotifications.statuses.processes'),
-            Notification::NOTIFICATION_ERRORED => $translator->trans('pushnotifications.statuses.errored')
+            Notification::NOTIFICATION_ERRORED => $translator->trans('pushnotifications.statuses.errored'),
+            Notification::NOTIFICATION_REJECTED => $translator->trans('pushnotifications.statuses.rejected'),
         );
 
         $links = array();
@@ -155,6 +227,24 @@ class AdminController extends Controller
                     'notificationId' => $notification->getId()
                 ))
             );
+
+            if ($notification->getStatus() == Notification::NOTIFICATION_NOTPROCESSED) {
+                $links[] = array(
+                    'rel' => 'reject',
+                    'href' => $this->generateUrl('ahs_pushnotificationsplugin_notification_reject', array(
+                        'notificationId' => $notification->getId()
+                    ))
+                );
+            }
+
+            if ($notification->getStatus() == Notification::NOTIFICATION_PROCESSED) {
+                $links[] = array(
+                    'rel' => 'duplicate',
+                    'href' => $this->generateUrl('ahs_pushnotificationsplugin_notification_duplicate', array(
+                        'notificationId' => $notification->getId()
+                    ))
+                );
+            }
         }
 
         $applications = array();
@@ -204,6 +294,9 @@ class AdminController extends Controller
             $pushHandler = new $pushHandlerNamespace();
 
             $response = $pushHandler->sendNotification($notification, $application);
+            if (is_null($response)) {
+                $response = array();
+            }
             $notification->addPushHandlerResponse($response);
             $notification->setRecipientsNumber($notification->getRecipientsNumber()+$pushHandler->getRecipientsNumber($response));
         }

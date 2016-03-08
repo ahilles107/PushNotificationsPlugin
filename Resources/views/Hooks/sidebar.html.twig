@@ -42,8 +42,23 @@
     font-size: 11px;
 }
 .articlebox .form-group #notification_applications label {margin-right: 10px}
+
+.articlebox .status-0 {color: #f0ad4e}
+.articlebox .status-8, .articlebox .status-9 {color: #d9534f}
+.articlebox li.status{padding-bottom: 7px;}
+
+.articlebox #alreadyPublishedNotifications {padding-left: 10px;margin-top: -5px;margin-bottom: -5px;}
 </style>
 <div class="articlebox" title="{{ pluginName }}">
+        {% if articleNotifications|length > 0 %}
+        <h4>{{ 'pushnotifications.hook.articleNotifications'|trans }}:</h4>
+        <ul id="alreadyPublishedNotifications">
+        {% for notification in articleNotifications %}
+            <li class="status status-{{ notification.status }}">{% if notification.status == 0 %}({{ 'pushnotifications.hook.waiting'|trans }}) {% elseif notification.status >= 8 %}({{ 'pushnotifications.hook.rejected'|trans }}) {% endif %}{{ notification.title }} {% if notification.status == 1 %}({{ notification.publishDate|date("Y-m-d h:i:s") }}){% endif %} - {{ 'pushnotifications.hook.recipients'|trans }}: {{ notification.recipientsNumber}}</li>
+        {% endfor %}
+        </ul>
+        <hr />
+        {% endif %}
         {{ form_start(form, {attr: {'id': 'create-push-notification', 'target': '_blank'}}) }}
             <div class="puhsNotificationsPreview">
                 <div class="pushIcon"><img src="{{ asset('/bundles/ahspushnotificationsplugin/images/newscoop_icon.png') }}" /></div>
@@ -80,6 +95,7 @@
             {% if not hasPermission('plugin_pushnotifications_publish') %}
             <div class="alert alert-warning" role="alert"><h4>{{ 'pushnotifications.createNotiffication.withoutPublishRights'|trans }}</h4></div>
             {% endif %}
+            <div class="alert-success js-notification-published-alert" style="display:none;" role="alert"><h3 style="padding: 5px;margin-bottom: 10px;color: #6c6c6c;">{{ 'pushnotifications.createNotiffication.published'|trans }}</h3></div>
 
             <input type="submit" class="default-button right-floated clear-margin next-to-field js-send-notification" value="{% if not hasPermission('plugin_pushnotifications_publish') %}{{ 'pushnotifications.hook.create'|trans }}{% else %}{{ 'pushnotifications.hook.publish'|trans }}{% endif %}">
         {{ form_end(form) }}
@@ -99,7 +115,18 @@ $(document).ready(function() {
             return;
         }
         $('.js-application-required').hide();
-        $('#create-push-notification').submit();
+        $('.js-send-notification').attr('disabled', true);
+
+        var data = $('#create-push-notification').serialize();
+        $.ajax({
+            url: '{{ path('ahs_pushnotificationsplugin_notification_create') }}',
+            type: "POST",
+            data: data,
+            dataType: "json"
+        }).done(function(res){
+            $('.js-notification-published-alert').show();
+            $('.js-send-notification').removeAttr('disabled');
+        });
     });
 });
 </script>
