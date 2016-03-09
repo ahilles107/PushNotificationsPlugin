@@ -52,10 +52,14 @@ class HooksListener
         )->getResult();
         $preferencesService = $this->container->get('system_preferences_service');
         $linkService = $this->container->get('article.link');
-
+        $articleData = $article->getData(null)->getData();
+        $content = '';
+        if (array_key_exists($preferencesService->ahs_pushnotifications_content_field, $articleData)) {
+            $content = $articleData[$preferencesService->ahs_pushnotifications_content_field];
+        }
         $notification = new Notification();
         $notification->setTitle($article->getTitle());
-        $notification->setContent($article->getData($preferencesService->ahs_pushnotifications_content_field));
+        $notification->setContent($content);
         $notification->setUrl($linkService->getLink($article));
         $notification->setArticleNumber($article->getNumber());
         $notification->setArticleLanguage($article->getLanguageId());
