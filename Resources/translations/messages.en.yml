@@ -1,11 +1,22 @@
 pushnotifications:
+    buttons:
+        next: "Next"
+        cancelAndGoBack: "Cancel and go back"
+        save: "Save"
+        cancel: "Cancel"
     menu:
         name: Push Notifications
         settings: Settings
+        list_notifications: List notifications
+        list_applications: List applications
+        create_notification: Create new notification
+        create_application: Create new application
+        create_edit_application: "Create/edit application"
     permissions:
         create: "Create"
         publish: "Publish"
         manage: "Manage"
+        settings: "Settings"
     statuses:
         notprocesses: "Waiting to be accepted"
         processes: "Published"
@@ -15,6 +26,9 @@ pushnotifications:
         withoutPublishRights: "Your notification will need to be accepted by someone with publish rights."
         required: "At least one application must be checked"
         published: "Notification was published sucesfully"
+    createApplication:
+        noSpecialSettings: "This PushHandler don't require any special settings - click \"Save\""
+        reloadPushHandlers: "Reload Push Handlers"
     settings:
         title: "Push Notifications Settings"
         formTitle: "Edit default settings"
@@ -26,7 +40,28 @@ pushnotifications:
         waiting: waiting
         rejected: rejected
         recipients: recipients
+    form:
+        notification:
+            title: "Title"
+            content: "Content"
+            appplications: "Applications"
+            publishDate: "Publish date"
+            url: "Url"
+            schedule: "Schedule"
+        settings:
+            default_article_type_field: "Default article type field used for content"
     table:
+        columns:
+            title: "Title"
+            content: "Content"
+            application: "Application"
+            user: "User"
+            created: "Created date"
+            publish_date: "Publish date"
+            status: "Status"
+            recipients: "Recipients number"
+            push_handler_name: "PushHandler Name"
+            push_handler_description: "Push Handler Description"
         actions:
             accept: "Accept"
             edit: "Edit"

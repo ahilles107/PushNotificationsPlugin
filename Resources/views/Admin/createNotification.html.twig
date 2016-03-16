@@ -25,6 +25,7 @@
 <style type="text/css" media="screen">
     a.action-btn {margin-left: 5px; margin-bottom: 5px;}
     #notification_publishDate_date{ float:left; margin-right: 15px; }
+    #notification_applications input {margin-left: 10px;}
 </style>
 {% endblock %}
 
@@ -80,8 +81,8 @@
 <div class="form-group">
   <div class="col-md-4 col-md-offset-4">
     {{ form_widget(form.schedule, {'attr': {'style': 'margin-bottom: 10px;'}}) }}
-    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">Cancel</a>
-    <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2 js-send-notification">Save</button>
+    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">{{ 'pushnotifications.buttons.cancel'|trans }}</a>
+    <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2 js-send-notification">{{ 'pushnotifications.buttons.save'|trans }}</button>
   </div>
 </div>
 </fieldset>

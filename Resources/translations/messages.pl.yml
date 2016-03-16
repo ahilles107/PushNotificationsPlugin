@@ -1,0 +1,70 @@
+pushnotifications:
+    buttons:
+        next: "Dalej"
+        cancelAndGoBack: "Anuluj i wróc"
+        save: "Zapisz"
+        cancel: "Anuluj"
+    menu:
+        name: "Powiadomienia Push"
+        settings: "Ustawienia"
+        list_notifications: "Powiadomienia"
+        list_applications: "Aplikacje"
+        create_notification: "Dodaj nowe powiadomienie"
+        create_application: "Dodaj nową aplikację"
+        create_edit_application: "Dodaj/edytuj applikację"
+    permissions:
+        create: "Twórz"
+        publish: "Publikuj"
+        manage: "Zarządzaj"
+        settings: "Zmieniaj ustawienia"
+    statuses:
+        notprocesses: "Czeka na akceptację"
+        processes: "Opublikowane"
+        errored: "Błąd"
+        rejected: "Odrzucone"
+    createNotiffication:
+        withoutPublishRights: "Twoje powiadomienia będzie musiało zostać zaakceptowane przez kogoś i uprawnieniami do publikacji."
+        required: "Co najmniej jedna aplikacja musi być zaznaczona"
+        published: "Powiadomienie zostało opublikowane"
+    createApplication:
+        noSpecialSettings: "Ten PushHandler nie wymaga żandych spoecjalnych ustawień - kliknij \"Dalej\""
+        reloadPushHandlers: "Odśwież PushHandlery"
+    settings:
+        title: "Ustawenia Powiadomień Push"
+        formTitle: "Edytuj ustawienia domyślne"
+    hook:
+        notpublished: "Przed utworzeniem Powiadomienia Push artykuł musi być opublikowany."
+        publish: "Utwórz i opublikuj powiadomienie"
+        create: "Utwórz powiadomienie"
+        articleNotifications: "Już utworzone powiadomienia (dla tego artykułu)"
+        waiting: "oczekujące"
+        rejected: "odrzucone"
+        recipients: "odbiorców"
+    form:
+        notification:
+            title: "Tytuł"
+            content: "Treść"
+            appplications: "Aplikacje"
+            publishDate: "Data publikacji"
+            url: "Adres url"
+            schedule: "Zaplanuj"
+        settings:
+            default_article_type_field: "Pole typu artykułu używane do załadowania treści powiadomienia"
+    table:
+        columns:
+            title: "Tutuł"
+            content: "Treść"
+            application: "Aplikacja"
+            user: "Użytkownik"
+            created: "Data utworzenia"
+            publish_date: "Data publikacji"
+            status: "Status"
+            recipients: "Liczba odbiorców"
+            push_handler_name: "Nazwa PushHandlera"
+            push_handler_description: "Opis PushHandlera"
+        actions:
+            accept: "Zaakceptuj"
+            edit: "Edytuj"
+            reject: "Odrzuć"
+            duplicate: "Duplikuj"
+            actions: "Akcje"
