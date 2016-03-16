@@ -96,7 +96,7 @@
             <div class="alert alert-warning" role="alert"><h4>{{ 'pushnotifications.createNotiffication.withoutPublishRights'|trans }}</h4></div>
             {% endif %}
             <div class="alert-success js-notification-published-alert" style="display:none;" role="alert"><h3 style="padding: 5px;margin-bottom: 10px;color: #6c6c6c;">{{ 'pushnotifications.createNotiffication.published'|trans }}</h3></div>
-
+            {{ form_widget(form.schedule, {'attr': {'class': 'button left-floated clear-margin next-to-field js-send-notification'}}) }}
             <input type="submit" class="default-button right-floated clear-margin next-to-field js-send-notification" value="{% if not hasPermission('plugin_pushnotifications_publish') %}{{ 'pushnotifications.hook.create'|trans }}{% else %}{{ 'pushnotifications.hook.publish'|trans }}{% endif %}">
         {{ form_end(form) }}
 </div>

@@ -42,14 +42,20 @@ class ConfigureMenuListener
         ->setLinkAttribute('data-toggle', 'rightdrop');
 
         $menu[$this->translator->trans('Plugins')][$pluginName]->addChild(
-            'Create new notification',
+            $this->translator->trans('pushnotifications.menu.create_notification'),
             array('uri' => $event->getRouter()->generate('ahs_pushnotificationsplugin_notification_create'))
         );
 
         $menu[$this->translator->trans('Plugins')][$pluginName]->addChild(
-            'List applications',
+            $this->translator->trans('pushnotifications.menu.list_notifications'),
+            array('uri' => $event->getRouter()->generate('ahs_pushnotificationsplugin_admin_index'))
+        );
+
+        $menu[$this->translator->trans('Plugins')][$pluginName]->addChild(
+            $this->translator->trans('pushnotifications.menu.list_applications'),
             array('uri' => $event->getRouter()->generate('ahs_pushnotificationsplugin_applications_index'))
         );
+
         $menu[$this->translator->trans('Plugins')][$pluginName]->addChild(
             $this->translator->trans('pushnotifications.menu.settings'),
             array('uri' => $event->getRouter()->generate('ahs_pushnotificationsplugin_settings'))

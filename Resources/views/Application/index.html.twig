@@ -14,15 +14,15 @@
 
 {% block admin_page_title_box %}
 <div class="toolbar row">
-    <span class="article-title">PushNotifications Applications</span>
+    <span class="article-title">{{ 'pushnotifications.menu.list_applications'|trans }}</span>
     <div class="pull-right">
         <div class="actions">
             <ul class="navigation" style="height: auto;">
                 <li>
-                    <a class="add" href="{{ url('ahs_pushnotificationsplugin_applications_create')}}">Add new application</a>
+                    <a class="add" href="{{ url('ahs_pushnotificationsplugin_applications_create')}}">{{ 'pushnotifications.menu.create_application'|trans }}</a>
                 </li>
                 <li>
-                    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}">List notifications</a>
+                    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}">{{ 'pushnotifications.menu.list_notifications'|trans }}</a>
                 </li>
             </ul>
         </div>
@@ -40,9 +40,9 @@
     <table id="notifications-table" class="table table-bordered table-hover table-striped" style="word-wrap: break-word;table-layout: fixed;">
     <thead>
       <tr>
-        <th data-dynatable-column="title">Title</th>
-        <th style="width: 165px" data-dynatable-column="pushhandler_name">Push Handler Name</th>
-        <th data-dynatable-column="pushhandler_description">Push Handler Description</th>
+        <th data-dynatable-column="title">{{ 'pushnotifications.table.columns.title'|trans }}</th>
+        <th style="width: 165px" data-dynatable-column="pushhandler_name">{{ 'pushnotifications.table.columns.push_handler_name'|trans }}</th>
+        <th data-dynatable-column="pushhandler_description">{{ 'pushnotifications.table.columns.push_handler_description'|trans }}</th>
         {% if hasPermission('plugin_pushnotifications_manage') %}
         <th style="width: 116px;">{{ 'pushnotifications.table.actions.actions'|trans }}</th>
         {% endif %}

@@ -21,6 +21,7 @@ use AHS\PushNotificationsPluginBundle\Entity\Application;
 use AHS\PushNotificationsPluginBundle\Form\PushHandlerSettingsType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ApplicationController extends Controller
 {
@@ -30,6 +31,11 @@ class ApplicationController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_settings')) {
+            throw new AccessDeniedException();
+        }
+
         return array();
     }
 
@@ -39,6 +45,11 @@ class ApplicationController extends Controller
      */
     public function createApplicationAction(Request $request)
     {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_settings')) {
+            throw new AccessDeniedException();
+        }
+
         $em = $this->container->get('em');
         $application = new Application();
 
@@ -48,6 +59,10 @@ class ApplicationController extends Controller
             if ($form->isValid()) {
                 $em->persist($application);
                 $em->flush();
+
+                return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_applications_pushhandler_settings', array(
+                    'applicationId' => $application->getId()
+                )));
             }
         }
 
@@ -62,6 +77,11 @@ class ApplicationController extends Controller
      */
     public function editApplicationAction(Request $request, $applicationId)
     {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_settings')) {
+            throw new AccessDeniedException();
+        }
+
         $em = $this->container->get('em');
         $application = $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Application')
             ->findOneById($applicationId);
@@ -90,6 +110,11 @@ class ApplicationController extends Controller
      */
     public function applicationPushHandlerSettingsAction(Request $request, $applicationId)
     {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_settings')) {
+            throw new AccessDeniedException();
+        }
+
         $em = $this->container->get('em');
         $application = $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Application')->findOneById($applicationId);
         $pushHandlerNamespace = $application->getPushHandler()->getNamespace();
@@ -107,7 +132,7 @@ class ApplicationController extends Controller
                 $application->setPushHandlerSettings($form->getData());
                 $em->flush();
 
-                return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_admin_index'));
+                return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_applications_index'));
             }
         }
 
@@ -121,6 +146,11 @@ class ApplicationController extends Controller
      */
     public function loadApplicationsAction(Request $request)
     {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_settings')) {
+            throw new AccessDeniedException();
+        }
+
         $em = $this->container->get('em');
         $zendRouter = $this->container->get('zend_router');
         $userService = $this->container->get('user');

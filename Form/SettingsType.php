@@ -20,7 +20,7 @@ class SettingsType extends AbstractType
     {
         $builder->add('content_field', 'text', array(
             'error_bubbling' => true,
-            'label' => 'Default article type field used for content?',
+            'label' => 'pushnotifications.form.settings.default_article_type_field',
             'required' => true
         ));
 

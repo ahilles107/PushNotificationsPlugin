@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use AHS\PushNotificationsPluginBundle\Form\SettingsType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SettingsController extends Controller
 {
@@ -26,6 +27,11 @@ class SettingsController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_settings')) {
+            throw new AccessDeniedException();
+        }
+
         $preferencesService = $this->container->get('system_preferences_service');
         $form = $this->createForm(new SettingsType(), array(
             'content_field' => $preferencesService->ahs_pushnotifications_content_field,

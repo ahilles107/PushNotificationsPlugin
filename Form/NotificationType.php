@@ -25,13 +25,16 @@ class NotificationType extends AbstractType
         $builder
             ->add('title', null, array(
                 'error_bubbling' => true,
+                'label' => 'pushnotifications.form.notification.title',
                 'required' => true,
             ))
             ->add('content', null, array(
+                'label' => 'pushnotifications.form.notification.content',
                 'error_bubbling' => true,
                 'required' => true,
             ))
             ->add('applications', 'entity', array(
+                'label' => 'pushnotifications.form.notification.appplications',
                 'class' => 'AHS\PushNotificationsPluginBundle\Entity\Application',
                 'error_bubbling' => true,
                 'required' => true,
@@ -47,6 +50,7 @@ class NotificationType extends AbstractType
                 'required' => false,
             ))
             ->add('publishDate', 'datetime', array(
+                'label' => 'pushnotifications.form.notification.publishDate',
                 'widget' => 'choice',
                 'format' => 'yyyy-MM-dd h:i:s',
                 'attr' => array(
@@ -56,10 +60,12 @@ class NotificationType extends AbstractType
                 'required' => true
             ))
             ->add('url', 'text', array(
+                'label' => 'pushnotifications.form.notification.url',
                 'error_bubbling' => true,
                 'required' => false,
             ))
             ->add('schedule', 'submit', array(
+                'label' => 'pushnotifications.form.notification.schedule',
                 'attr' => array('class' => 'btn btn-primary col-md-12 js-send-notification'),
             ));
     }

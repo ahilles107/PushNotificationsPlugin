@@ -6,7 +6,7 @@
         <div class="actions">
             <ul class="navigation" style="height: auto;">
                 <li>
-                    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}">List notifications</a>
+                    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}">{{ 'pushnotifications.menu.list_notifications'|trans }}</a>
                 </li>
             </ul>
         </div>
@@ -42,8 +42,8 @@
 
 <div class="form-group">
   <div class="col-md-4 col-md-offset-4">
-    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">Cancel</a>
-    <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2">Save</button>
+    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">{{ 'pushnotifications.buttons.cancel'|trans }}</a>
+    <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2">{{ 'pushnotifications.buttons.save'|trans }}</button>
   </div>
 </div>
 </fieldset>

@@ -15,16 +15,14 @@
 </style>
 {% endblock %}
 
-{% block admin_title %}{{ parent() }} - PushNotifications Admin{% endblock %}
-
 {% block admin_page_title_box %}
 <div class="toolbar row">
-    <span class="article-title">PushNotifications Admin</span>
+    <span class="article-title">{{ 'pushnotifications.menu.list_notifications'|trans }}</span>
     <div class="pull-right">
         <div class="actions">
             <ul class="navigation" style="height: auto;">
                 <li>
-                    <a class="add" href="{{ url('ahs_pushnotificationsplugin_notification_create')}}">Add new notification</a>
+                    <a class="add" href="{{ url('ahs_pushnotificationsplugin_notification_create')}}">{{ 'pushnotifications.menu.create_notification'|trans }}</a>
                 </li>
             </ul>
         </div>
@@ -42,16 +40,16 @@
     <table id="notifications-table" class="table table-bordered table-hover table-striped" style="word-wrap: break-word;table-layout: fixed;">
     <thead>
       <tr>
-        <th data-dynatable-column="title">Title</th>
-        <th style="width: 165px" data-dynatable-column="content">Content</th>
-        <th data-dynatable-column="application">Application</th>
-        <th data-dynatable-column="userId">User</th>
-        <th data-dynatable-column="createdAt">Created date</th>
-        <th data-dynatable-column="publishDate">Publish date</th>
-        <th data-dynatable-column="status">Status</th>
-        <th data-dynatable-column="recipients">Recipients number</th>
+        <th data-dynatable-column="title">{{ 'pushnotifications.table.columns.title'|trans }}</th>
+        <th style="width: 165px" data-dynatable-column="content">{{ 'pushnotifications.table.columns.content'|trans }}</th>
+        <th data-dynatable-column="application">{{ 'pushnotifications.table.columns.application'|trans }}</th>
+        <th data-dynatable-column="userId">{{ 'pushnotifications.table.columns.user'|trans }}</th>
+        <th data-dynatable-column="createdAt">{{ 'pushnotifications.table.columns.created'|trans }}</th>
+        <th data-dynatable-column="publishDate">{{ 'pushnotifications.table.columns.publish_date'|trans }}</th>
+        <th data-dynatable-column="status">{{ 'pushnotifications.table.columns.status'|trans }}</th>
+        <th data-dynatable-column="recipients">{{ 'pushnotifications.table.columns.recipients'|trans }}</th>
         {% if hasPermission('plugin_pushnotifications_publish') or hasPermission('plugin_pushnotifications_manage') %}
-        <th style="width: 116px;">{{ 'ads.table.actions.actions'|trans }}</th>
+        <th style="width: 116px;">{{ 'pushnotifications.table.actions.actions'|trans }}</th>
         {% endif %}
       </tr>
     </thead>
@@ -121,13 +119,16 @@
             return '<tr class="'+row_class+'">' + tr + '</tr>';
         },
         _cellWriter: function (column, record) {
-            if (column.label == '{{ 'ads.table.actions.actions'|trans }}') {
+            if (column.label == '{{ 'pushnotifications.table.actions.actions'|trans }}') {
                 column.attributeWriter = function(record) {
                     var html = "";
                     for (index = 0; index < record['links'].length; ++index) {
                         var el = record['links'][index];
                         if (el['rel'] == 'accept' && record['statusCode'] == 0) {
                             html += "<a class='btn btn-xs btn-success action-btn js-accept' href="+el['href']+">{{ 'pushnotifications.table.actions.accept'|trans }}</a>";
+                        }
+                        if (el['rel'] == 'edit' && record['statusCode'] == 0) {
+                            html += "<a class='btn btn-xs btn-primary action-btn js-accept' href="+el['href']+">{{ 'pushnotifications.table.actions.edit'|trans }}</a>";
                         }
                         if (el['rel'] == 'reject' && record['statusCode'] == 0) {
                             html += "<a class='btn btn-xs btn-danger action-btn js-reject' href="+el['href']+">{{ 'pushnotifications.table.actions.reject'|trans }}</a>";

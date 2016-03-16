@@ -1,10 +1,12 @@
 {% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
 
 {% block admin_title %}{{ parent() }} - PushNotifications Admin{% endblock %}
-{% block admin_page_title_content %}PushNotifications Admin{% endblock %}
 {% block admin_stylesheets %}
 <link rel="stylesheet" href="{{ asset('/bundles/ahsadvertsplugin/css/backend.css') }}">
 {% endblock %}
+
+{% block admin_page_title_content %} {{ 'pushnotifications.menu.create_edit_application'|trans }} {% endblock %}
+
 {% block admin_content %}
 <div class="plugin-container">
 {% if form_errors(form) %}
@@ -30,10 +32,25 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
-    <button id="singlebutton" name="singlebutton" class="btn btn-success pull-right">Next</button>
-    <a href="{{ path('ahs_pushnotificationsplugin_applications_index')}}" class="btn btn-default pull-right button-align">Cancel and go back</a>
+    <button id="singlebutton" name="singlebutton" class="btn btn-success pull-right">{{ 'pushnotifications.buttons.next'|trans }}</button>
+    <a href="{{ path('ahs_pushnotificationsplugin_applications_index')}}" class="btn btn-default pull-right button-align">{{ 'pushnotifications.buttons.cancelAndGoBack'|trans }}</a>
+    <a href="#" class="btn btn-primary pull-right button-align js-reload-handlers">{{ 'pushnotifications.createApplication.reloadPushHandlers'|trans }}</a>
   </div>
 </div>
 </fieldset>
 {{ form_end(form) }}
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.js-reload-handlers').click(function (e){
+        e.preventDefault();
+        $.ajax({
+            url: '{{ path('ahs_pushnotificationsplugin_handlers_refresh') }}',
+            type: "POST"
+        }).done(function(res){
+            location.reload();
+        });
+    })
+});
+</script>
 {% endblock %}

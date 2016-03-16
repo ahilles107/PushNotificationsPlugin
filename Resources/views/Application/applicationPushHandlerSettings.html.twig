@@ -1,7 +1,7 @@
 {% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
 
 {% block admin_title %}{{ parent() }} - PushNotifications Admin{% endblock %}
-{% block admin_page_title_content %}PushNotifications Admin{% endblock %}
+{% block admin_page_title_content %} {{ 'pushnotifications.menu.create_edit_application'|trans }} {% endblock %}
 {% block admin_stylesheets %}
 <link rel="stylesheet" href="{{ asset('/bundles/ahsadvertsplugin/css/backend.css') }}">
 {% endblock %}
@@ -22,13 +22,19 @@
         {{ form_widget(child, {'attr': {'class': 'form-control input-md'}}) }}
       </div>
     </div>
+    {% else %}
+    <div class="form-group">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="alert alert-warning" role="alert">{{ 'pushnotifications.createApplication.noSpecialSettings'|trans }}</div>
+        </div>
+    </div>
     {% endfor %}
 
 <div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
-    <button id="singlebutton" name="singlebutton" class="btn btn-success pull-right">Save</button>
-    <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default pull-right button-align">Cancel and go back</a>
+    <button id="singlebutton" name="singlebutton" class="btn btn-success pull-right">{{ 'pushnotifications.buttons.save'|trans }}</button>
+    <a href="{{ path('ahs_pushnotificationsplugin_applications_index')}}" class="btn btn-default pull-right button-align">{{ 'pushnotifications.buttons.cancelAndGoBack'|trans }}</a>
   </div>
 </div>
 </fieldset>

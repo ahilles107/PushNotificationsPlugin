@@ -37,7 +37,8 @@ class PermissionsListener
         $event->registerPermissions($this->translator->trans('pushnotifications.menu.name'), array(
             'plugin_pushnotifications_create' => $this->translator->trans('pushnotifications.permissions.create'),
             'plugin_pushnotifications_publish' => $this->translator->trans('pushnotifications.permissions.publish'),
-            'plugin_pushnotifications_manage' => $this->translator->trans('pushnotifications.permissions.manage')
+            'plugin_pushnotifications_manage' => $this->translator->trans('pushnotifications.permissions.manage'),
+            'plugin_pushnotifications_settings' => $this->translator->trans('pushnotifications.permissions.settings')
         ));
     }
 }

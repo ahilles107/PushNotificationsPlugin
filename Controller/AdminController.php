@@ -44,7 +44,7 @@ class AdminController extends Controller
      * @Template()
      * @Method("GET|POST")
      */
-    public function createNotifficationAction(Request $request, $notificationId = null)
+    public function createNotificationAction(Request $request, $notificationId = null)
     {
         $user = $this->container->get('user')->getCurrentUser();
         if (!$user->hasPermission('plugin_pushnotifications_create')) {
@@ -58,9 +58,11 @@ class AdminController extends Controller
             $notification = clone $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')
                 ->findOneById($notificationId);
             $notification->setCreatedAt(new \DateTime('now'));
+            $notification->setCreatedAt(new \DateTime('now'));
             $notification->setPublishDate(new \DateTime('now'));
             $notification->setPushHandlerResponse(array());
             $notification->setRecipientsNumber(0);
+            $notification->setStatus(Notification::NOTIFICATION_NOTPROCESSED);
         }
 
         $form = $this->createForm(new NotificationType(), $notification);
@@ -82,6 +84,45 @@ class AdminController extends Controller
                     $notification->setApplications(null);
                     return new Response($this->get('jms_serializer')->serialize($notification, 'json'));
                 }
+
+                return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_admin_index'));
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * @Route("/admin/pushnotifications/notifications/{notificationId}/edit", name="ahs_pushnotificationsplugin_notification_edit")
+     * @Template("AHSPushNotificationsPluginBundle:Admin:createNotification.html.twig")
+     * @Method("GET|POST")
+     */
+    public function editNotificationAction(Request $request, $notificationId)
+    {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_create')) {
+            throw new AccessDeniedException();
+        }
+
+        $em = $this->container->get('em');
+        $notification = $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')
+            ->findOneById($notificationId);
+
+        if (!$notificationId || $notification->getStatus() !== Notification::NOTIFICATION_NOTPROCESSED) {
+            return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_admin_index'));
+        }
+
+        $form = $this->createForm(new NotificationType(), $notification);
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                if ($user->hasPermission('plugin_pushnotifications_publish') && !$form->get('schedule')->isClicked()) {
+                    $this->handleNotification($notification);
+                }
+
+                $em->flush();
 
                 return new RedirectResponse($this->generateUrl('ahs_pushnotificationsplugin_admin_index'));
             }
@@ -133,11 +174,16 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/pushnotifications/handlers/refresh")
+     * @Route("/admin/pushnotifications/handlers/refresh", name="ahs_pushnotificationsplugin_handlers_refresh")
      * @Method("POST|GET")
      */
     public function refreshPushHandlersAction()
     {
+        $user = $this->container->get('user')->getCurrentUser();
+        if (!$user->hasPermission('plugin_pushnotifications_settings')) {
+            throw new AccessDeniedException();
+        }
+
         $pushHandlerService = $this->container->get('ahs_pushnotifications_plugin.service.push_handler');
         $pushHandlerService->refreshPushHandlers();
 
@@ -235,6 +281,12 @@ class AdminController extends Controller
                         'notificationId' => $notification->getId()
                     ))
                 );
+                $links[] = array(
+                    'rel' => 'edit',
+                    'href' => $this->generateUrl('ahs_pushnotificationsplugin_notification_edit', array(
+                        'notificationId' => $notification->getId()
+                    ))
+                );
             }
 
             if ($notification->getStatus() == Notification::NOTIFICATION_PROCESSED) {
@@ -279,7 +331,8 @@ class AdminController extends Controller
     private function handleNotification($notification)
     {
         if ($notification->getPublishDate() < new \DateTime('now')) {
-            $notification->setPublishDate(new \DateTime('now'));
+            $date = new \DateTime('now');
+            $notification->setPublishDate($date->modify('+1 minute'));
         }
 
         $article = $this->container->get('em')->getRepository('Newscoop\Entity\Article')
