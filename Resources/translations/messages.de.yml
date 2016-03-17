@@ -1,0 +1,70 @@
+pushnotifications:
+    buttons:
+        next: "Weiter"
+        cancelAndGoBack: "Abbrechen und zurück"
+        save: "Speichern"
+        cancel: "Abbrechen"
+    menu:
+        name: "Push-Benachrichtigungen"
+        settings: "Einstellungen"
+        list_notifications: "Liste der Benachrichtigungen"
+        list_applications: "Liste der Anwendungen"
+        create_notification: "Benachrichtigung erstellen"
+        create_application: "Neue Anwendung erstellen"
+        create_edit_application: "Anwendung erstellen/bearbeiten"
+    permissions:
+        create: "Erstellen"
+        publish: "Publizieren"
+        manage: "Verwalten"
+        settings: "Einstellen"
+    statuses:
+        notprocesses: "Warte auf Annahme"
+        processes: "Veröffentlicht"
+        errored: "Fehlerhaft"
+        rejected: "Abgelehnt"
+    createNotiffication:
+        withoutPublishRights: "Benachrichtigung muss angenommen und freigegeben werden."
+        required: "Zumindest eine Anwendung muss angewählt werden."
+        published: "Benachrichtigung wurde erfolgreich veröffentlicht."
+    createApplication:
+        noSpecialSettings: "Der Push-Handler braucht keine besonderen Einstellungen - Klick \"Speichern\""
+        reloadPushHandlers: "Push-Handler neu laden"
+    settings:
+        title: "Einstellungen für Push-Benachrichtigungen"
+        formTitle: "Standardeinstellungen bearbeiten"
+    hook:
+        notpublished: "Bitte vor dem Erstellen von Push-Benachrichtigungen Artikel veröffentlichen."
+        publish: "Benachrichtigung erstellen und veröffentlichen"
+        create: "Benachrichtigung erstellen"
+        articleNotifications: "Benachrichtigung (zu diesem Artikel) wurde bereits erstellt"
+        waiting: "warte"
+        rejected: "abgelehnt"
+        recipients: "Empfänger"
+    form:
+        notification:
+            title: "Titel"
+            content: "Inhalt"
+            appplications: "Anwendungen"
+            publishDate: "Veröffentlichungsdatum"
+            url: "URL"
+            schedule: "Terminieren"
+        settings:
+            default_article_type_field: "Standard Artikeltyp-Feld für Inhalt"
+    table:
+        columns:
+            title: "Titel"
+            content: "Inhalt"
+            application: "Anwendung"
+            user: "Benutzer"
+            created: "Erstellungsdatum"
+            publish_date: "Veröffentlichungsdatum"
+            status: "Status"
+            recipients: "Empfänger Nummer"
+            push_handler_name: "Name des Push-Handlers"
+            push_handler_description: "Beschreibung des Push-Handlers"
+        actions:
+            accept: "Annehmen"
+            edit: "Bearbeiten"
+            reject: "Ablehnen"
+            duplicate: "Duplizieren"
+            actions: "Aktionen"
