@@ -1,17 +1,34 @@
-Push Notifications
-==================
+Push Notifications in Newscoop
+==============================
 
-What You can do with this plugin?
+Schedule and publish push notifications directly from Newscoop backend (also from article edit screen).
 
- * Define applications (usually different end applications or publications)
- * Create notifications:
-  * Choose application
-  * Set title
-  * Set content
-  * Set publish date
- * Create notification from article edit screen
-  * Choose article type field used for notification content.
+### Features
+
+ * Define applications
+ * Create notifications
  * List notifications
- * Create application and set service handler for it.
 
-PushHandlers are classes called when notification is created. Plugin pass notification object to it. PushHandler is responsible for talking with push notifications provider api and scheduling it there. Plugin by default have PushHandlers for OneSignal.com API (free service).
+### Support different providers with PushHnadlers system
+
+PushHandlers are classes called when notification is created. Plugin pass notification object to it. PushHandler is responsible for talking with push notifications provider api and scheduling it there. Plugin by default have PushHandler for OneSignal.com API (free service).
+
+### Commands
+#### Install the plugin
+
+``` bash
+$ php application/console plugins:install "newscoop/send-feedback-plugin" --env=prod
+$ php application/console assets:install public/
+```
+
+#### Update the plugin
+
+``` bash
+$ php application/console plugins:update "newscoop/send-feedback-plugin" --env=prod
+```
+
+#### Remove the plugin
+
+``` bash
+$ php application/console plugins:remove "newscoop/send-feedback-plugin" --env=prod
+```

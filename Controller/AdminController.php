@@ -336,8 +336,8 @@ class AdminController extends Controller
         }
 
         $article = $this->container->get('em')->getRepository('Newscoop\Entity\Article')
-                ->getArticle($notification->getArticleNumber(), $notification->getArticleLanguage())
-                ->getOneOrNullResult();
+            ->getArticle($notification->getArticleNumber(), $notification->getArticleLanguage())
+            ->getOneOrNullResult();
         if ($article) {
             $notification->setArticle($article);
         }
