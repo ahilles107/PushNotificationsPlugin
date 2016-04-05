@@ -57,12 +57,24 @@ class HooksListener
         if (array_key_exists($preferencesService->ahs_pushnotifications_content_field, $articleData)) {
             $content = $articleData[$preferencesService->ahs_pushnotifications_content_field];
         }
+
+        //prepare extra switches
+        $preferencesService = $this->container->get('system_preferences_service');
+        $extraSwitches = array();
+        foreach (explode(',', $preferencesService->ahs_pushnotifications_custom_switches) as $key => $value) {
+            $extraSwitches[trim($value)] = false;
+        }
+        if (count($extraSwitches) == 0) {
+            $extraSwitches = null;
+        }
+
         $notification = new Notification();
         $notification->setTitle($article->getTitle());
         $notification->setContent($content);
         $notification->setUrl($linkService->getLink($article));
         $notification->setArticleNumber($article->getNumber());
         $notification->setArticleLanguage($article->getLanguageId());
+        $notification->setSwitches($extraSwitches);
 
         $form = $this->container->get('form.factory')->create(new NotificationType(), $notification, array(
             'action' => $this->container->get('router')->generate('ahs_pushnotificationsplugin_notification_create')

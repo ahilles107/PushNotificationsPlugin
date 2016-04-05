@@ -22,6 +22,11 @@ class SettingsType extends AbstractType
             'error_bubbling' => true,
             'label' => 'pushnotifications.form.settings.default_article_type_field',
             'required' => true
+        ))
+        ->add('custom_switches', 'text', array(
+            'error_bubbling' => true,
+            'label' => 'pushnotifications.form.settings.custom_switches',
+            'required' => false
         ));
 
     }

@@ -35,6 +35,7 @@ class SettingsController extends Controller
         $preferencesService = $this->container->get('system_preferences_service');
         $form = $this->createForm(new SettingsType(), array(
             'content_field' => $preferencesService->ahs_pushnotifications_content_field,
+            'custom_switches' => $preferencesService->ahs_pushnotifications_custom_switches
         ));
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -42,6 +43,7 @@ class SettingsController extends Controller
                 $data = $form->getData();
 
                 $preferencesService->ahs_pushnotifications_content_field = $data['content_field'];
+                $preferencesService->ahs_pushnotifications_custom_switches = $data['custom_switches'];
                 $this->get('session')->getFlashBag()->add('success', 'Settings are saved');
             }
         }

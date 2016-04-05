@@ -1,8 +1,8 @@
 {
     "name": "ahs/pushnotifications-plugin-bundle",
-    "description": "PushNotifications plugin for Newscoop",
-    "keywords": ["AHS", "pushnotifications"],
-    "version": "1.0.0",
+    "description": "Push Notifications plugin for Newscoop",
+    "keywords": ["AHS", "pushnotifications", "newscoop", "OneSignal"],
+    "version": "1.0.1",
     "type": "newscoop-plugin",
     "license": "GPL-3.0",
     "authors": [

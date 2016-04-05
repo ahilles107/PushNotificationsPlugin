@@ -26,6 +26,7 @@ pushnotifications:
         withoutPublishRights: "Your notification will need to be accepted by someone with publish rights."
         required: "At least one application must be checked"
         published: "Notification was published sucesfully"
+        scheduled: "Notification was scheduled sucesfully"
     createApplication:
         noSpecialSettings: "This PushHandler don't require any special settings - click \"Save\""
         reloadPushHandlers: "Reload Push Handlers"
@@ -50,6 +51,7 @@ pushnotifications:
             schedule: "Schedule"
         settings:
             default_article_type_field: "Default article type field used for content"
+            custom_switches: "Comma separated list of custom swiches visible in notfication forms"
     table:
         columns:
             title: "Title"

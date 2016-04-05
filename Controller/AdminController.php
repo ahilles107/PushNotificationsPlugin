@@ -51,8 +51,19 @@ class AdminController extends Controller
             throw new AccessDeniedException();
         }
 
+        //prepare extra switches
+        $preferencesService = $this->container->get('system_preferences_service');
+        $extraSwitches = array();
+        foreach (explode(',', $preferencesService->ahs_pushnotifications_custom_switches) as $key => $value) {
+            $extraSwitches[trim($value)] = false;
+        }
+        if (count($extraSwitches) == 0) {
+            $extraSwitches = null;
+        }
+
         $em = $this->container->get('em');
         $notification = new Notification();
+        $notification->setSwitches($extraSwitches);
 
         if ($notificationId) {
             $notification = clone $em->getRepository('AHS\PushNotificationsPluginBundle\Entity\Notification')

@@ -14,6 +14,8 @@ namespace AHS\PushNotificationsPluginBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * Notification form type.
@@ -68,6 +70,18 @@ class NotificationType extends AbstractType
                 'label' => 'pushnotifications.form.notification.schedule',
                 'attr' => array('class' => 'btn btn-primary col-md-12 js-send-notification'),
             ));
+
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                $notification = $event->getData();
+                $form = $event->getForm();
+
+                if ($notification->getSwitches() != null) {
+                    $form->add('switches', 'collection', array(
+                        'type'   => 'checkbox',
+                        'options'  => array('required'  => false)
+                    ));
+                }
+            });
     }
 
     /**
