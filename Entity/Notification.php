@@ -134,6 +134,12 @@ class Notification
      */
     protected $article;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @var string
+     */
+    protected $switches;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -327,5 +333,15 @@ class Notification
     public function getArticle()
     {
         return $this->article;
+    }
+
+    public function setSwitches($switches)
+    {
+        $this->switches = serialize($switches);
+    }
+
+    public function getSwitches()
+    {
+        return unserialize($this->switches);
     }
 }

@@ -41,6 +41,13 @@
 </div>
 
 <div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.custom_switches) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.custom_switches) }}
+  </div>
+</div>
+
+<div class="form-group">
   <div class="col-md-4 col-md-offset-4">
     <a href="{{ path('ahs_pushnotificationsplugin_admin_index')}}" class="btn btn-default col-md-5">{{ 'pushnotifications.buttons.cancel'|trans }}</a>
     <button id="singlebutton" name="singlebutton" class="btn btn-success col-md-5 col-md-offset-2">{{ 'pushnotifications.buttons.save'|trans }}</button>

@@ -30,6 +30,8 @@
 
 #notification_publishDate_date {float:left; margin-right: 10px; font-size: 14px;}
 #notification_publishDate_time {float:left; font-size: 14px;}
+#notification_switches>div {float:left; margin-right: 10px}
+#notification_switches>div>input {margin-left: 4px; margin-bottom: 3px;}
 
 .articlebox .form-group {margin: 5px 0px;}
 .articlebox .form-group label{}
@@ -92,10 +94,21 @@
               </div>
             </div>
 
+            {% if form.vars.value.switches != null %}
+            <div class="form-group" style="margin-bottom: 15px;">
+              <label for="textinput" class="block-label">{{ form_label(form.switches) }}: </label>
+              <div >
+                {{ form_widget(form.switches, {'attr': {'class': 'deactivate-date-time-widget'}}) }}
+              </div>
+              <div style="clear: both"></div>
+            </div>
+            {% endif %}
+
             {% if not hasPermission('plugin_pushnotifications_publish') %}
             <div class="alert alert-warning" role="alert"><h4>{{ 'pushnotifications.createNotiffication.withoutPublishRights'|trans }}</h4></div>
             {% endif %}
             <div class="alert-success js-notification-published-alert" style="display:none;" role="alert"><h3 style="padding: 5px;margin-bottom: 10px;color: #6c6c6c;">{{ 'pushnotifications.createNotiffication.published'|trans }}</h3></div>
+            <div class="alert-success js-notification-scheduled-alert" style="display:none;" role="alert"><h3 style="padding: 5px;margin-bottom: 10px;color: #6c6c6c;">{{ 'pushnotifications.createNotiffication.scheduled'|trans }}</h3></div>
             {{ form_widget(form.schedule, {'attr': {'class': 'button left-floated clear-margin next-to-field js-send-notification'}}) }}
             <input type="submit" class="default-button right-floated clear-margin next-to-field js-send-notification" value="{% if not hasPermission('plugin_pushnotifications_publish') %}{{ 'pushnotifications.hook.create'|trans }}{% else %}{{ 'pushnotifications.hook.publish'|trans }}{% endif %}">
         {{ form_end(form) }}
@@ -117,14 +130,21 @@ $(document).ready(function() {
         $('.js-application-required').hide();
         $('.js-send-notification').attr('disabled', true);
 
-        var data = $('#create-push-notification').serialize();
+        var buttonName = $(this).attr('name');
+        var data = $('#create-push-notification').serializeArray();
+        data.push({'name': buttonName, 'value': true});
+
         $.ajax({
             url: '{{ path('ahs_pushnotificationsplugin_notification_create') }}',
             type: "POST",
             data: data,
             dataType: "json"
         }).done(function(res){
-            $('.js-notification-published-alert').show();
+            if (buttonName == 'notification[schedule]') {
+                $('.js-notification-scheduled-alert').show();
+            } else {
+                $('.js-notification-published-alert').show();
+            }
             $('.js-send-notification').removeAttr('disabled');
         });
     });

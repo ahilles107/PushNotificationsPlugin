@@ -26,6 +26,8 @@
     a.action-btn {margin-left: 5px; margin-bottom: 5px;}
     #notification_publishDate_date{ float:left; margin-right: 15px; }
     #notification_applications input {margin-left: 10px;}
+    #notification_switches>div {float:left; margin-right: 10px}
+    #notification_switches>div>input {margin-left: 5px;}
 </style>
 {% endblock %}
 
@@ -71,6 +73,14 @@
     {{ form_widget(form.url, {'attr': {'class': 'form-control input-md'}}) }}
   </div>
 </div>
+{% if form.vars.value.switches != null %}
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.switches) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.switches) }}
+  </div>
+</div>
+{% endif %}
 {% if not hasPermission('plugin_pushnotifications_publish') %}
 <div class="form-group">
     <div class="col-md-6 col-md-offset-3">
