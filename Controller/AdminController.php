@@ -54,8 +54,10 @@ class AdminController extends Controller
         //prepare extra switches
         $preferencesService = $this->container->get('system_preferences_service');
         $extraSwitches = array();
-        foreach (explode(',', $preferencesService->ahs_pushnotifications_custom_switches) as $key => $value) {
-            $extraSwitches[trim($value)] = false;
+        if ($preferencesService->ahs_pushnotifications_custom_switches !== null) {
+            foreach (explode(',', $preferencesService->ahs_pushnotifications_custom_switches) as $key => $value) {
+                $extraSwitches[trim($value)] = false;
+            }
         }
         if (count($extraSwitches) == 0) {
             $extraSwitches = null;

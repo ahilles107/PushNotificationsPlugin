@@ -328,6 +328,8 @@ class Notification
     public function setArticle(\Newscoop\Entity\Article $article)
     {
         $this->article = $article;
+
+        return $this;
     }
 
     public function getArticle()
@@ -338,6 +340,8 @@ class Notification
     public function setSwitches($switches)
     {
         $this->switches = serialize($switches);
+
+        return $this;
     }
 
     public function getSwitches()

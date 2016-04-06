@@ -77,8 +77,8 @@ class NotificationType extends AbstractType
 
                 if ($notification->getSwitches() != null) {
                     $form->add('switches', 'collection', array(
-                        'type'   => 'checkbox',
-                        'options'  => array('required'  => false)
+                        'type' => 'checkbox',
+                        'options' => array('required'  => false)
                     ));
                 }
             });
