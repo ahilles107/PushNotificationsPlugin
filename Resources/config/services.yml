@@ -13,7 +13,7 @@ services:
         arguments:
             - @translator
 
-    ahs_extra_plugin.hooks.listener:
+    ahs_pushnotifications_plugin.hooks.listener:
         class: "AHS\\PushNotificationsPluginBundle\\EventListener\\HooksListener"
         arguments: ["@service_container"]
         tags:
@@ -30,3 +30,9 @@ services:
         class: AHS\PushNotificationsPluginBundle\Service\PushHandlerService
         arguments:
             - @doctrine
+
+    ahs_pushnotifications_plugin.listener.thread:
+        class: "AHS\\PushNotificationsPluginBundle\\EventListener\\ThreadListener"
+        arguments: ["@em", "@article.link"]
+        tags:
+          - { name: kernel.event_listener, event: comment.create, method: sendNotifications }

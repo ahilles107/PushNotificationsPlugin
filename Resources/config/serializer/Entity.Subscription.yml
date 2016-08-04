@@ -1,0 +1,38 @@
+AHS\PushNotificationsPluginBundle\Entity\Subscription:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            read_only: true
+            type: integer
+            groups: ["list", "details"]
+            serialized_name: id
+        playerId:
+            expose: true
+            read_only: true
+            type: string
+            groups: ["list", "details"]
+            serialized_name: playerId
+        articleNumber:
+            expose: true
+            type: integer
+            read_only: true
+            groups: ["list", "details"]
+            serialized_name: articleNumber
+        articleLanguage:
+            expose: true
+            type: integer
+            read_only: true
+            groups: ["list", "details"]
+            serialized_name: articleLanguage
+        commentId:
+            expose: true
+            type: integer
+            read_only: true
+            groups: ["list", "details"]
+            serialized_name: commentId
+        createdAt:
+            expose: true
+            read_only: true
+            groups: ["list", "details"]
+            serialized_name: created_at

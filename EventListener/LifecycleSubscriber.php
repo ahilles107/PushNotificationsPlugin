@@ -113,6 +113,7 @@ class LifecycleSubscriber implements EventSubscriberInterface
             $this->em->getClassMetadata('AHS\PushNotificationsPluginBundle\Entity\Application'),
             $this->em->getClassMetadata('AHS\PushNotificationsPluginBundle\Entity\Notification'),
             $this->em->getClassMetadata('AHS\PushNotificationsPluginBundle\Entity\PushHandler'),
+            $this->em->getClassMetadata('AHS\PushNotificationsPluginBundle\Entity\Subscription'),
         );
     }
 

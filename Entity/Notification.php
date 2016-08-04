@@ -83,7 +83,7 @@ class Notification
     /**
      * @ORM\Column(type="boolean", name="is_active")
      *
-     * @var string
+     * @var boolean
      */
     protected $isActive;
 
@@ -139,6 +139,13 @@ class Notification
      * @var string
      */
     protected $switches;
+
+    /**
+     * @ORM\Column(type="boolean")
+     *
+     * @var boolean
+     */
+    protected $isThreadNotification;
 
     public function __construct()
     {
@@ -347,5 +354,17 @@ class Notification
     public function getSwitches()
     {
         return unserialize($this->switches);
+    }
+
+    public function getIsThreadNotification()
+    {
+        return $this->isThreadNotification;
+    }
+
+    public function setIsThreadNotification($isThreadNotification)
+    {
+        $this->isThreadNotification = $isThreadNotification;
+
+        return $this;
     }
 }

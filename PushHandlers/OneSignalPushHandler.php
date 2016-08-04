@@ -53,7 +53,7 @@ class OneSignalPushHandler extends AbstractPushHandler
     public function sendNotification($notification, $application)
     {
         $settings = $application->getPushHandlerSettings();
-        $config = new Config($settings['applicationId'], $settings['applicationAuthKey'], $settings['userAuthKey']);
+        $config = new Config($settings['applicationId'], $settings['applicationAuthKey']);
         $oneSignalApi = new OneSignal($config);
         $notifications = new Notifications($oneSignalApi);
 

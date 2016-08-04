@@ -14,7 +14,7 @@ namespace AHS\PushNotificationsPluginBundle\PushHandlers;
 /**
  * Abstract PushHandler class.
  */
-abstract class AbstractPushHandler
+abstract class AbstractPushHandler implements PushHandlerInterface
 {
     /**
      * Push Handler name
@@ -83,7 +83,7 @@ abstract class AbstractPushHandler
     }
 
     /**
-     * Returns the Push Handler description
+     * Returns the Push Handler required settings
      *
      * @return string
      */

@@ -16,25 +16,36 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Application form type.
+ * Subscription form type.
  */
-class ApplicationType extends AbstractType
+class SubscriptionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', null, array(
+            ->add('playerId', null, array(
                 'error_bubbling' => true,
                 'required' => true,
             ))
-            ->add('pushHandler', null, array(
+            ->add('articleLanguage', null, array(
                 'error_bubbling' => true,
                 'required' => true,
             ))
-            ->add('useForThreadNotifications', null, array(
-                'label' => 'pushnotifications.form.application.useForThreadNotifications',
+            ->add('articleNumber', null, array(
                 'error_bubbling' => true,
+                'required' => true,
+            ))
+            ->add('commentId', null, array(
+                'error_bubbling' => true,
+                'required' => true,
             ));
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'csrf_protection' => false,
+        ));
     }
 
     /**
@@ -42,6 +53,6 @@ class ApplicationType extends AbstractType
      */
     public function getName()
     {
-        return 'application';
+        return 'subscription';
     }
 }

@@ -86,6 +86,7 @@ class AdminController extends Controller
                 $notification->setIsActive(true);
                 $notification->addPushHandlerResponse(array());
                 $em->persist($notification);
+                $em->flush();
 
                 if ($user->hasPermission('plugin_pushnotifications_publish') && !$form->get('schedule')->isClicked()) {
                     $this->handleNotification($notification);
@@ -317,12 +318,14 @@ class AdminController extends Controller
             $applications[] = $application->getTitle();
         }
 
-        return array(
-            'id' => $notification->getId(),
-            'title' => $notification->getTitle(),
-            'content' => $notification->getContent(),
-            'application' => implode(', ', $applications),
-            'user' => array(
+        if (null == $notification->getUser()) {
+            $user = array(
+                'href' => "#",
+                'username' => 'system',
+                'name' => 'system'
+            );
+        } else {
+            $user = array(
                 'href' => $zendRouter->assemble(array(
                     'module' => 'admin',
                     'controller' => 'user',
@@ -331,7 +334,15 @@ class AdminController extends Controller
                 ), 'default', true),
                 'username' => $notification->getUser()->getUsername(),
                 'name' => $notification->getUser()->getFirstName().' '.$notification->getUser()->getLastName()
-            ),
+            );
+        }
+
+        return array(
+            'id' => $notification->getId(),
+            'title' => $notification->getTitle(),
+            'content' => $notification->getContent(),
+            'application' => implode(', ', $applications),
+            'user' => $user,
             'publishDate' => $notification->getPublishDate(),
             'created' => $notification->getCreatedAt(),
             'status' => $humanStatuses[$notification->getStatus()],

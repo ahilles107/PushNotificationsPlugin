@@ -30,6 +30,12 @@
   </div>
 </div>
 <div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">{{ form_label(form.useForThreadNotifications) }}</label>
+  <div class="col-md-4">
+    {{ form_widget(form.useForThreadNotifications, {'attr': {'class': 'form-control input-sm'}}) }}
+  </div>
+</div>
+<div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
     <button id="singlebutton" name="singlebutton" class="btn btn-success pull-right">{{ 'pushnotifications.buttons.next'|trans }}</button>

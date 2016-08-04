@@ -49,6 +49,8 @@ pushnotifications:
             publishDate: "Publish date"
             url: "Url"
             schedule: "Schedule"
+        application:
+            useForThreadNotifications: "Use for comments notifications"
         settings:
             default_article_type_field: "Default article type field used for content"
             custom_switches: "Comma separated list of custom swiches visible in notfication forms"

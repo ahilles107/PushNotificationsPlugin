@@ -53,10 +53,17 @@ class Application
      */
     protected $pushHandler;
 
+    /**
+     * @ORM\Column(type="boolean")
+     * @var boolean
+     */
+    protected $useForThreadNotifications;
+
     public function __construct()
     {
         $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setPushHandlerSettings(array());
+        $this->setUseForThreadNotifications(false);
     }
 
     public function getId()
@@ -101,6 +108,16 @@ class Application
     public function setPushHandlerSettings(array $settings)
     {
         $this->pushHandlerSettings = json_encode($settings);
+    }
+
+    public function getUseForThreadNotifications()
+    {
+        return $this->useForThreadNotifications;
+    }
+
+    public function setUseForThreadNotifications($useForThreadNotifications)
+    {
+        $this->useForThreadNotifications = $useForThreadNotifications;
     }
 
     public function __toString()

@@ -48,6 +48,8 @@ pushnotifications:
             publishDate: "Data publikacji"
             url: "Adres url"
             schedule: "Zaplanuj"
+        application:
+            useForThreadNotifications: "Używaj dla powiadominień o nowych komentarzach"
         settings:
             default_article_type_field: "Pole typu artykułu używane do załadowania treści powiadomienia"
     table:
